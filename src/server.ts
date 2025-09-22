@@ -1,16 +1,17 @@
 import express from "express";
 import { serverConfig } from "./config";
-import v1Router from "./routers/v1/index.router";
-import { appErrorHandler } from "./middlewares/error.middleware";
-import logger from "./config/logger.config";
-import { attachCorrelationIdMiddleware } from "./middlewares/correlation.middleware";
 import connectDB from "./config/db.config";
+import logger from "./config/logger.config";
+import v1Routes from "./routes/v1/index.routes";
+import { appErrorHandler } from "./middlewares/error.middleware";
+import { attachCorrelationIdMiddleware } from "./middlewares/correlation.middleware";
+
 const app = express();
 
 app.use(express.json());
 
 app.use(attachCorrelationIdMiddleware);
-app.use("/api/v1", v1Router);
+app.use("/api/v1", v1Routes);
 
 app.use(appErrorHandler);
 
