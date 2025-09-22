@@ -4,6 +4,7 @@ import v1Router from "./routers/v1/index.router";
 import { appErrorHandler } from "./middlewares/error.middleware";
 import logger from "./config/logger.config";
 import { attachCorrelationIdMiddleware } from "./middlewares/correlation.middleware";
+import connectDB from "./config/db.config";
 const app = express();
 
 app.use(express.json());
@@ -16,4 +17,5 @@ app.use(appErrorHandler);
 app.listen(serverConfig.PORT, () => {
   logger.info(`Server is running on http://localhost:${serverConfig.PORT}`);
   logger.info(`Press Ctrl+C to stop the server.`);
+  connectDB();
 });
