@@ -1,6 +1,6 @@
 import { Document, model, Schema } from "mongoose";
-
-interface UserAttrs {
+import bcrypt from "bcrypt";
+export interface UserAttrs {
   name: string;
   email: string;
   password: string;
@@ -8,7 +8,7 @@ interface UserAttrs {
   avatar?: string;
 }
 
-interface UserDoc extends UserAttrs, Document {
+export interface UserDoc extends UserAttrs, Document {
   id: string;
 }
 
@@ -50,6 +50,7 @@ const userSchema = new Schema<UserDoc>(
     toJSON: {
       transform: (_, record: Record<string, any>) => {
         delete record.__v;
+        delete record.password;
         record.id = record._id;
         delete record._id;
         return record;
@@ -60,6 +61,8 @@ const userSchema = new Schema<UserDoc>(
 
 userSchema.pre("save", async function (next) {
   const user = this;
+  const hashedPassword = bcrypt.hashSync(user.password, 10);
+  user.password = hashedPassword;
   user.avatar = `https://robohash.org/${user.username}`;
   next();
 });

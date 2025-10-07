@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
-export default function crudRepository<T>(model: mongoose.Model<T>) {
+export default function crudRepository<T, TAttrs = T>(
+  model: mongoose.Model<T>
+) {
   return {
-    async create(data: T) {
+    async create(data: TAttrs) {
       const doc = await model.create(data);
       return doc;
     },
